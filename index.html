@@ -195,16 +195,14 @@
 					$("#offer").html("<h3>All Giveaway campaigns are over, we will update here when there is any new giveaway available. Stay tuned!</h3>");
 					
 				}else{
-					$.getJSON("https://www.cpagrip.com/common/offer_feed_json.php?user_id=1394276&key=a310952d67d91d9e802679a72d6c0d71&ua="+navigator.userAgent+"&tracking_id=&country="+country+"&offer_type=Email/Zip Submit",
+					$.getJSON("https://www.cpagrip.com/common/offer_feed_json.php?user_id=1394276&key=a310952d67d91d9e802679a72d6c0d71&ua="+navigator.userAgent+"&domain=trianglerockers.com&tracking_id=&country="+country+"&offer_type=Email/Zip Submit",
 					function(json_data){
 						var offer_text = '';
 						if (json_data.offers.length === 0) {
 							$("#offer").html("<h3>All giveaway campaigns are over. We will update here when there is a new giveaway available. Stay tuned!</h3>");
 						}else{
 						  $.each(json_data.offers, function(key, offer){
-							//lets use a custom tracking domain for the links :)
-							offer.offerlink = offer.offerlink.replace('www.cpagrip.com','transformingselects.com');
-			
+
 							offer_text += '<div id="item" class="d-inline-block col-md-6" style="padding:25px"';
 							offer_text += '<div class="card">';
 							offer_text += '<a target="_blank" href="'+offer.offerlink+'">';
