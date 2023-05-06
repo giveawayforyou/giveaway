@@ -127,15 +127,25 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Stand a chance to win Giveaway!</h1>
+    <h1 class="title">Today's Giveaway!</h1>
 
 	<div id="countdown">
 		<ul>
+		<li><span id="hours"></span>Hours</li>
 		<li><span id="minutes"></span>Minutes</li>
 		<li><span id="seconds"></span>Seconds</li>
 		</ul>
 	</div>
-	
+	<div>
+	<h4>Unlock Incredible Prizes: Enter Now for a Chance to Win!</h4>
+	<span>
+	Attention prize lovers! Don't miss out on your chance to win amazing goodies in our exclusive giveaway. 
+	From must-have gadgets to luxury experiences, we're giving away an array of incredible prizes. 
+	Enter now for a shot at scoring big – click to participate and let the winning begin!
+	</span>
+	</div>
+	</br>
+	</br>
 	<div id="offer"><h2>Loading Giveaway..</h2></div>
 
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -146,13 +156,20 @@
         hour = minute * 60,
         day = hour * 24;
 
-  const endDate = AddMinutesToDate(new Date(), 15);
-  const countDown = new Date(endDate).getTime(),
+  let today = new Date(),
+      dd = String(today.getDate() +1).padStart(2, "0"),
+      mm = String(today.getMonth() +1).padStart(2, "0"),
+      yyyy = today.getFullYear()
+  
+  today = mm + "/" + dd + "/" + yyyy;
+  
+  const countDown = new Date(today).getTime(),
       x = setInterval(function() {    
 
         const now = new Date().getTime(),
               distance = countDown - now;
-
+		  
+		  document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour)),
           document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute)),
           document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
 
@@ -178,12 +195,15 @@
 					$("#offer").html("<h3>All Giveaway campaigns are over, we will update here when there is any new giveaway available. Stay tuned!</h3>");
 					
 				}else{
-					$.getJSON("https://www.cpagrip.com/common/offer_feed_json.php?user_id=1394276&key=a310952d67d91d9e802679a72d6c0d71&tracking_id=&country="+country+"&offer_type=Email/Zip Submit",
+					$.getJSON("https://www.cpagrip.com/common/offer_feed_json.php?user_id=1394276&key=a310952d67d91d9e802679a72d6c0d71&ua="+navigator.userAgent+"&tracking_id=&country="+country+"&offer_type=Email/Zip Submit",
 					function(json_data){
 						var offer_text = '';
-						$.each(json_data.offers, function(key, offer){
+						if (json_data.offers.length === 0) {
+							$("#offer").html("<h3>All giveaway campaigns are over. We will update here when there is a new giveaway available. Stay tuned!</h3>");
+						}else{
+						  $.each(json_data.offers, function(key, offer){
 							//lets use a custom tracking domain for the links :)
-							//offer.offerlink = offer.offerlink.replace('www.cpagrip.com','motifiles.com');
+							offer.offerlink = offer.offerlink.replace('www.cpagrip.com','transformingselects.com');
 			
 							offer_text += '<div id="item" class="d-inline-block col-md-6" style="padding:25px"';
 							offer_text += '<div class="card">';
@@ -195,7 +215,8 @@
 							offer_text += '</div>';
 							
 						});
-						$("#offer").html(offer_text);
+							$("#offer").html(offer_text);
+						}
 					});
 				}
 			});
