@@ -147,7 +147,8 @@
 	</br>
 	</br>
 	<div id="offer"><h2>Loading Giveaway..</h2></div>
-
+</body>
+</html>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
   (function () {
@@ -185,29 +186,21 @@
   }());
   
   $(function() {
-			var country ='';
-			$.getJSON("https://api.ipdata.co?api-key=56cefbd48dddc0300aa47ba447fb71b9095691ef8763f8d219b6823c")
-			.done (function(location) {
-				country = location.country_code;
-				
-				if(country == null){
-				
-					$("#offer").html("<h3>All Giveaway campaigns are over, we will update here when there is any new giveaway available. Stay tuned!</h3>");
-					
-				}else{
-					$.getJSON("https://www.cpagrip.com/common/offer_feed_json.php?user_id=1394276&key=a310952d67d91d9e802679a72d6c0d71&ua="+navigator.userAgent+"&domain=transformingselects.com&tracking_id=&country="+country+"&offer_type=Email/Zip Submit",
+			$.getJSON("https://d3ikgzh4osba2b.cloudfront.net/public/offers/feed.php?user_id=511688&api_key=b16fb5531f174b65f9171fe18cba933c&s1=&s2=",
 					function(json_data){
 						var offer_text = '';
-						if (json_data.offers.length === 0) {
+					    json_data = json_data.filter( element => element.category_id =="5");
+						if (json_data.length === 0) {
 							$("#offer").html("<h3>All giveaway campaigns are over. We will update here when there is a new giveaway available. Stay tuned!</h3>");
 						}else{
-						  $.each(json_data.offers, function(key, offer){
+						  $.each(json_data, function(key, offer){
 
 							offer_text += '<div id="item" class="d-inline-block col-md-6" style="padding:25px"';
 							offer_text += '<div class="card">';
-							offer_text += '<a target="_blank" href="'+offer.offerlink+'">';
-							offer_text += '<img src="'+ offer.offerphoto +'" class="card-img-top" alt="Item 1">';
-							offer_text += '</br></br><h5 class="card-title">'+ offer.title +'</h5>';
+							offer_text += '<a target="_blank" href="'+offer.url+'">';
+							offer_text += '<img src="'+ offer.network_icon +'" class="card-img-top" alt="Item 1">';
+							offer_text += '</br></br><h5 class="card-title">'+ offer.name +'</h5>';
+							offer_text += '<p class="card-title">'+ offer.anchor +'</p>';
 							offer_text += '</a>';
 							offer_text += '</div>';
 							offer_text += '</div>';
@@ -216,13 +209,9 @@
 							$("#offer").html(offer_text);
 						}
 					});
-				}
-			});
-		});
+	});
 		
   function AddMinutesToDate(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
 }
   </script>
-</body>
-</html>
