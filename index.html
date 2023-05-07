@@ -186,31 +186,42 @@
   }());
   
   $(function() {
-			$.getJSON("https://d3ikgzh4osba2b.cloudfront.net/public/offers/feed.php?user_id=511688&api_key=b16fb5531f174b65f9171fe18cba933c&s1=&s2=",
-					function(json_data){
-						var offer_text = '';
-					    json_data = json_data.filter( element => element.category_id =="5");
-						if (json_data.length === 0) {
-							$("#offer").html("<h3>All giveaway campaigns are over. We will update here when there is a new giveaway available. Stay tuned!</h3>");
-						}else{
-						  $.each(json_data, function(key, offer){
+			var ip ='';
+			$.getJSON("https://api.ipdata.co?api-key=56cefbd48dddc0300aa47ba447fb71b9095691ef8763f8d219b6823c")
+			.done (function(location) {
+				ip = location.ip;
+				
+				if(ip == null){
+				
+					$("#offer").html("<h3>All Giveaway campaigns are over, we will update here when there is any new giveaway available. Stay tuned!</h3>");
 
-							offer_text += '<div id="item" class="d-inline-block col-md-6" style="padding:25px"';
-							offer_text += '<div class="card">';
-							offer_text += '<a target="_blank" href="'+offer.url+'">';
-							offer_text += '<img src="'+ offer.network_icon +'" class="card-img-top" alt="Item 1">';
-							offer_text += '</br></br><h5 class="card-title">'+ offer.name +'</h5>';
-							offer_text += '<p class="card-title">'+ offer.anchor +'</p>';
-							offer_text += '</a>';
-							offer_text += '</div>';
-							offer_text += '</div>';
-							
-						});
-							$("#offer").html(offer_text);
-						}
-					});
-	});
+				}else{
+					$.getJSON("https://d3ikgzh4osba2b.cloudfront.net/public/offers/feed.php?user_id=511688&api_key=b16fb5531f174b65f9171fe18cba933c&s1=&s2=&ip="+ip+"&user_agent="+navigator.userAgent,
+							function(json_data){
+								var offer_text = '';
+								json_data = json_data.filter( element => element.category_id =="5");
+								if (json_data.length === 0) {
+									$("#offer").html("<h3>All giveaway campaigns are over. We will update here when there is a new giveaway available. Stay tuned!</h3>");
+								}else{
+								$.each(json_data, function(key, offer){
 		
+									offer_text += '<div id="item" class="d-inline-block col-md-6" style="padding:25px"';
+									offer_text += '<div class="card">';
+									offer_text += '<a target="_blank" href="'+offer.url+'">';
+									offer_text += '<img src="'+ offer.network_icon +'" class="card-img-top" alt="Item 1">';
+									offer_text += '</br></br><h5 class="card-title">'+ offer.name +'</h5>';
+									offer_text += '<p class="card-title">'+ offer.anchor +'</p>';
+									offer_text += '</a>';
+									offer_text += '</div>';
+									offer_text += '</div>';
+									
+								});
+									$("#offer").html(offer_text);
+						    }
+					});
+				}
+			});
+		});
   function AddMinutesToDate(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
 }
